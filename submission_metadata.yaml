@@ -4,17 +4,18 @@
 # ============================================================================
 # Team identity
 # ============================================================================
-team_name: "team-alpha"  # Replace with your registered team name
+team_name: "Vertex Labs"
 
 primary_contact:
-  name: "YOUR_FULL_NAME"          # ← fill in
-  email: "YOUR_EMAIL@example.com" # ← fill in
-  phone: "+91-XXXXXXXXXX"         # ← fill in
+  name: "Meghashyam Pawar"
+  email: "pawarkrishna3925@gmail.com"
+  phone: "+91-XXXXXXXXXX"         # Please fill in your actual phone number
 
 team_members:
-  - name: "YOUR_FULL_NAME"
-    email: "YOUR_EMAIL@example.com"
+  - name: "Meghashyam Pawar"
+    email: "pawarkrishna3925@gmail.com"
     role: "ML Engineer / Team Lead"
+
 
 # ============================================================================
 # Code and reproducibility
