@@ -29,7 +29,9 @@ def main():
     embeddings = embedder.generate_embeddings(strings)
     
     # Save embeddings to disk
-    np.save(args.out_embeddings, embeddings)
+    out_path = Path(args.out_embeddings)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    np.save(str(out_path), embeddings)
     print(f"Successfully saved {len(embeddings)} embeddings to {args.out_embeddings}")
 
 if __name__ == '__main__':
