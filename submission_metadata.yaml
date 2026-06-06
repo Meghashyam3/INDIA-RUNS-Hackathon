@@ -1,0 +1,81 @@
+# Redrob Hackathon — Submission Metadata
+# Fill in your personal details before pushing to GitHub.
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "team-alpha"  # Replace with your registered team name
+
+primary_contact:
+  name: "YOUR_FULL_NAME"          # ← fill in
+  email: "YOUR_EMAIL@example.com" # ← fill in
+  phone: "+91-XXXXXXXXXX"         # ← fill in
+
+team_members:
+  - name: "YOUR_FULL_NAME"
+    email: "YOUR_EMAIL@example.com"
+    role: "ML Engineer / Team Lead"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/YOUR_USERNAME/India_Runs_AI_Hackathon"
+# ← Replace YOUR_USERNAME with your actual GitHub username
+
+sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/redrob-ranker"
+# ← To be filled after deploying HuggingFace Space (Phase 5)
+
+reproduce_command: >
+  python src/precompute.py --candidates ./data/candidates.jsonl --out_embeddings ./data/candidate_embeddings.npy &&
+  python src/rank.py --candidates ./data/candidates.jsonl --embeddings ./data/candidate_embeddings.npy --jd ./data/job_description.docx.txt --out ./submission.csv
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Windows 11, Intel CPU"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.14.2"
+  os: "Windows 11"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true
+  pre_computation_time_minutes: 5   # Approximate for 100K candidates on CPU
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Gemini"   # Used as coding assistant for architecture discussion, code review, debugging
+
+ai_usage_summary: |
+  Used Google Gemini (Antigravity) as a coding assistant and pair-programmer throughout development.
+  Gemini was used for architecture discussion, code review, debugging, and iterating on scoring
+  logic. All engineering decisions, design choices, and scoring weights were made by the human
+  participant. No candidate profile data was fed to any LLM. The ranking system itself makes
+  zero external API calls — all inference is local and CPU-based.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Hybrid 3-component ranking system: (1) Explicit JD skill matching (45%) using 30+ keywords
+  extracted from the JD text, with disqualifier penalties for wrong-domain titles and
+  consulting-only careers. (2) Semantic similarity (35%) via FAISS IndexFlatL2 over
+  all-MiniLM-L6-v2 embeddings of candidate profile strings. (3) Behavioral reliability
+  multiplier (20%) derived from redrob_signals — penalising low response rates, interview
+  ghosting, and long inactivity periods. Honeypot detection via 3 checks (expert+0-months
+  skills, YoE impossibility, perfect assessment scores). Reasoning is template-based and
+  strictly hallucination-free: every claim cites a verifiable field from the candidate JSON.
+  Pre-computation generates embeddings offline; the online ranking step runs in ~15 seconds.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true        # Implemented 3-check honeypot detector in src/heuristics.py
+  reproduction_tested: true        # Tested end-to-end on sample_candidates.json locally
