@@ -15,15 +15,24 @@ team_members:
   - name: "Meghashyam Pawar"
     email: "pawarkrishna3925@gmail.com"
     role: "ML Engineer / Team Lead"
+  - name: "Shriniket Awate"
+    email: "shriniketstudy@gmail.com"
+    role: "Data Engineer"
+  - name: "Yash Maheshwari"
+    email: "yashmaheshwari2909@gmail.com"
+    role: "Frontend Developer"
+  - name: "Laviza Khan"
+    email: "laviza07khan@gmail.com"
+    role: "QA / Validation Engineer"
 
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "https://github.com/YOUR_USERNAME/India_Runs_AI_Hackathon"
-# ← Replace YOUR_USERNAME with your actual GitHub username
+github_repo: "<INSERT_GITHUB_REPO_LINK_HERE>"
+# ← Remainder: Replace this with your actual GitHub repository URL
 
-sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/redrob-ranker"
-# ← To be filled after deploying HuggingFace Space (Phase 5)
+sandbox_link: "<INSERT_SANDBOX_LINK_HERE>"
+# ← Remainder: Replace this with your HuggingFace Spaces link (or Streamlit Community Cloud link)
 
 reproduce_command: >
   python src/precompute.py --candidates ./data/candidates.jsonl --out_embeddings ./data/candidate_embeddings.npy &&
