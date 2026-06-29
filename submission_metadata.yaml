@@ -9,13 +9,12 @@ team_name: "Vertex Labs"
 primary_contact:
   name: "Meghashyam Pawar"
   email: "pawarkrishna3925@gmail.com"
-  phone: "+91-XXXXXXXXXX"         # Please fill in your actual phone number
+  phone: "+91-8482999943" # Please fill in your actual phone number
 
 team_members:
   - name: "Meghashyam Pawar"
     email: "pawarkrishna3925@gmail.com"
     role: "ML Engineer / Team Lead"
-
 
 # ============================================================================
 # Code and reproducibility
@@ -42,13 +41,13 @@ compute:
   uses_gpu_for_inference: false
   has_network_during_ranking: false
   pre_computation_required: true
-  pre_computation_time_minutes: 5   # Approximate for 100K candidates on CPU
+  pre_computation_time_minutes: 5 # Approximate for 100K candidates on CPU
 
 # ============================================================================
 # AI tools declaration
 # ============================================================================
 ai_tools_used:
-  - "Gemini"   # Used as coding assistant for architecture discussion, code review, debugging
+  - "Gemini" # Used as coding assistant for architecture discussion, code review, debugging
 
 ai_usage_summary: |
   Used Google Gemini (Antigravity) as a coding assistant and pair-programmer throughout development.
@@ -78,5 +77,5 @@ declarations:
   read_submission_spec: true
   code_is_original_work: true
   no_collusion: true
-  honeypot_check_done: true        # Implemented 3-check honeypot detector in src/heuristics.py
-  reproduction_tested: true        # Tested end-to-end on sample_candidates.json locally
+  honeypot_check_done: true # Implemented 3-check honeypot detector in src/heuristics.py
+  reproduction_tested: true # Tested end-to-end on sample_candidates.json locally
