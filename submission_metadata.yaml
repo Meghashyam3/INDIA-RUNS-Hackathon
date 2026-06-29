@@ -1,5 +1,4 @@
 # Redrob Hackathon — Submission Metadata
-# Fill in your personal details before pushing to GitHub.
 
 # ============================================================================
 # Team identity
@@ -9,7 +8,7 @@ team_name: "Vertex Labs"
 primary_contact:
   name: "Meghashyam Pawar"
   email: "pawarkrishna3925@gmail.com"
-  phone: "+91-8482999943" # Please fill in your actual phone number
+  phone: "+91-8482999943"
 
 team_members:
   - name: "Meghashyam Pawar"
@@ -29,10 +28,7 @@ team_members:
 # Code and reproducibility
 # ============================================================================
 github_repo: "<INSERT_GITHUB_REPO_LINK_HERE>"
-# ← Remainder: Replace this with your actual GitHub repository URL
-
 sandbox_link: "<INSERT_SANDBOX_LINK_HERE>"
-# ← Remainder: Replace this with your HuggingFace Spaces link (or Streamlit Community Cloud link)
 
 reproduce_command: >
   python src/precompute.py --candidates ./data/candidates.jsonl --out_embeddings ./data/candidate_embeddings.npy &&
