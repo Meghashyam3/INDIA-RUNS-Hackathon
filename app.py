@@ -74,22 +74,7 @@ st.markdown("""
         padding-top: 3rem !important;
     }
 
-    details.candidate-card {
-        border: 1px solid #E5E7EB;
-        border-radius: 8px;
-        background: #FFFFFF;
-        margin-bottom: 1rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        transition: box-shadow 0.2s ease-in-out;
-    }
-    details.candidate-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    details.candidate-card > summary {
-        padding: 1.25rem 1.5rem;
-        cursor: pointer;
-        list-style: none;
-    }
-    details.candidate-card > summary::-webkit-details-marker { display: none; }
-    details.candidate-card[open] > summary { border-bottom: 1px solid #F3F4F6; }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -239,41 +224,36 @@ if submit_clicked:
             if "current_role_is" in d or "entire_career" in d
         )
 
-        warning_html = ""
-        pill_color, pill_text, pill_label = "#D1FAE5", "#065F46", "Best Fit"
+        is_flagged = beh_res.get('is_honeypot') or has_hard_disqualifier
+        pill_label = "Low Match" if is_flagged else "Best Fit"
+        pill_color = "#FEE2E2" if is_flagged else "#D1FAE5"
+        pill_text  = "#B91C1C" if is_flagged else "#065F46"
 
-        if beh_res.get('is_honeypot') or has_hard_disqualifier:
-            warning_html = """
-<div style="margin-top: 8px; color: #B91C1C; background-color: #FEE2E2; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block;">
-    ⚠️ Defensive Flag: Keyword Stuffer/Wrong Domain
-</div>"""
-            pill_color, pill_text, pill_label = "#FEE2E2", "#B91C1C", "Low Match"
+        expander_label = (
+            f"Rank #{c_rank}   |   {c_id}   |   {c_title}   |   {c_yoe} YoE   |   {pill_label}: {c_score:.1f}%"
+        )
 
-        card = f"""
-<details class="candidate-card" {'open' if c_rank <= 3 else ''}>
-    <summary>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 16px; color: #111827; font-weight: 500; width: 100%;">
-                <span style="color: #605DEC; font-weight: 800; margin-right: 12px; font-size: 18px;">Rank #{c_rank}</span>
-                <span style="font-weight: 600; color: #111827; font-size: 17px;">Candidate ID: {c_id}</span> | {c_title} | {c_yoe} YoE
-                <span style="background-color: {pill_color}; color: {pill_text}; padding: 4px 12px; border-radius: 999px; font-weight: 600; font-size: 13px; margin-left: 12px; float: right;">{pill_label}: {c_score:.1f}%</span>
-            </div>
-        </div>
-        {warning_html}
-    </summary>
-    <div style="padding: 1.5rem; background-color: #FAFAFA; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
-        <div style="font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 6px;">AI-Generated Reasoning:</div>
-        <div style="font-size: 14px; color: #4B5563; margin-bottom: 20px; line-height: 1.6;">{r['reasoning']}</div>
-        <div style="font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 10px;">Sub-Scores:</div>
-        <div style="display: flex; gap: 48px; font-size: 14px; color: #4B5563;">
-            <div><span style="font-weight: 600; color:#374151;">Semantic Match:</span> {r['semantic_score']*100:.1f}%</div>
-            <div><span style="font-weight: 600; color:#374151;">Keyword Density:</span> {jd_res['score']*100:.1f}%</div>
-            <div><span style="font-weight: 600; color:#374151;">Behavioral Indicators:</span> {beh_res['multiplier']*100:.1f}%</div>
-        </div>
+        with st.expander(expander_label, expanded=(c_rank <= 3)):
+            if is_flagged:
+                st.markdown(
+                    "<div style='background:#FEE2E2; color:#B91C1C; padding:6px 12px; border-radius:6px; "
+                    "font-size:13px; font-weight:600; display:inline-block; margin-bottom:12px;'>"
+                    "⚠️ Defensive Flag: Keyword Stuffer / Wrong Domain</div>",
+                    unsafe_allow_html=True
+                )
+
+            st.markdown(f"""
+<div style="background:#FAFAFA; padding:1.25rem 1.5rem; border-radius:8px;">
+    <div style="font-size:14px; font-weight:700; color:#111827; margin-bottom:6px;">AI-Generated Reasoning:</div>
+    <div style="font-size:14px; color:#4B5563; line-height:1.7; margin-bottom:20px;">{r['reasoning']}</div>
+    <div style="font-size:14px; font-weight:700; color:#111827; margin-bottom:10px;">Sub-Scores:</div>
+    <div style="display:flex; gap:48px; font-size:14px; color:#4B5563;">
+        <div><span style="font-weight:600; color:#374151;">Semantic Match:</span> {r['semantic_score']*100:.1f}%</div>
+        <div><span style="font-weight:600; color:#374151;">Keyword Density:</span> {jd_res['score']*100:.1f}%</div>
+        <div><span style="font-weight:600; color:#374151;">Behavioral Indicators:</span> {beh_res['multiplier']*100:.1f}%</div>
     </div>
-</details>
-"""
-        st.markdown(card, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
     # ─── Export Button ────────────────────────────────────────────────────────
     st.markdown("<br><br>", unsafe_allow_html=True)
