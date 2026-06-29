@@ -27,7 +27,7 @@ team_members:
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "<INSERT_GITHUB_REPO_LINK_HERE>"
+github_repo: "https://github.com/Meghashyam3/INDIA-RUNS-Hackathon"
 sandbox_link: "<INSERT_SANDBOX_LINK_HERE>"
 
 reproduce_command: >
