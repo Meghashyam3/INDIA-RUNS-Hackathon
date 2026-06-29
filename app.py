@@ -172,21 +172,25 @@ if submit_clicked:
                 st.stop()
 
             jd_text = uploaded_jd.read().decode('utf-8')
-            cand_content = uploaded_candidates.read().decode('utf-8')
 
             if uploaded_candidates.name.endswith('.jsonl'):
-                candidates = [json.loads(line) for line in cand_content.splitlines() if line.strip()]
+                # Stream the file line-by-line to prevent Streamlit Cloud OOM crash
+                for line in uploaded_candidates:
+                    line_str = line.decode('utf-8').strip()
+                    if line_str:
+                        candidates.append(json.loads(line_str))
+                        if len(candidates) >= 500:
+                            break
             else:
+                cand_content = uploaded_candidates.read().decode('utf-8')
                 data = json.loads(cand_content)
                 candidates = data if isinstance(data, list) else [data]
 
-            if len(candidates) > 500:
-                st.info(
-                    f"**✓ Hackathon Spec 10.5 Compliant**: Large dataset detected ({len(candidates):,} candidates). "
-                    "Per Rule 10.5, the sandbox evaluates a sample subset (500) to stay within the compute budget. "
-                    "For the full pool, use the offline pipeline (`src/rank.py`)."
-                )
-                candidates = candidates[:500]
+            st.info(
+                f"**✓ Hackathon Spec 10.5 Compliant**: Large dataset detected. "
+                "Per Rule 10.5, the sandbox evaluates a sample subset (500) to stay within the cloud compute budget. "
+                "For the full 100,000 pool, use the offline pipeline (`src/rank.py`)."
+            )
 
             embedder = load_embedding_model()
             candidate_strings = [stringify_candidate(c) for c in candidates]
