@@ -74,6 +74,29 @@ st.markdown("""
         padding-top: 3rem !important;
     }
 
+    /* Candidate card expander styling */
+    [data-testid="stExpander"] {
+        border: 1px solid #E5E7EB !important;
+        border-radius: 0 0 8px 8px !important;
+        background: #FFFFFF !important;
+        margin-top: 0 !important;
+    }
+    [data-testid="stExpander"] summary {
+        font-size: 13px !important;
+        color: #6B7280 !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    /* Card container top */
+    .card-header {
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        padding: 1rem 1.5rem;
+        margin-bottom: 0;
+    }
+
 
 </style>
 """, unsafe_allow_html=True)
@@ -225,29 +248,40 @@ if submit_clicked:
         )
 
         is_flagged = beh_res.get('is_honeypot') or has_hard_disqualifier
-        pill_label = "Low Match" if is_flagged else "Best Fit"
-        pill_color = "#FEE2E2" if is_flagged else "#D1FAE5"
-        pill_text  = "#B91C1C" if is_flagged else "#065F46"
 
-        expander_label = (
-            f"Rank #{c_rank}   |   {c_id}   |   {c_title}   |   {c_yoe} YoE   |   {pill_label}: {c_score:.1f}%"
-        )
+        # Score-based pill: green for good, amber for mid, red for flagged/low
+        if is_flagged or c_score < 40:
+            pill_bg, pill_fg, pill_label = "#FEE2E2", "#B91C1C", "Low Match"
+        elif c_score >= 65:
+            pill_bg, pill_fg, pill_label = "#D1FAE5", "#065F46", "Best Fit"
+        else:
+            pill_bg, pill_fg, pill_label = "#FEF3C7", "#92400E", "Good Match"
 
-        with st.expander(expander_label, expanded=(c_rank <= 3)):
-            if is_flagged:
-                st.markdown(
-                    "<div style='background:#FEE2E2; color:#B91C1C; padding:6px 12px; border-radius:6px; "
-                    "font-size:13px; font-weight:600; display:inline-block; margin-bottom:12px;'>"
-                    "⚠️ Defensive Flag: Keyword Stuffer / Wrong Domain</div>",
-                    unsafe_allow_html=True
-                )
+        # Card header row (always visible)
+        st.markdown(f"""
+<div style="background:#FFFFFF; border:1px solid #E5E7EB; border-bottom:none;
+     border-radius:8px 8px 0 0; padding:1rem 1.5rem; margin-top:1rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <span style="color:#605DEC; font-weight:800; font-size:18px; margin-right:10px;">Rank #{c_rank}</span>
+            <span style="font-weight:600; color:#111827; font-size:15px;">Candidate ID: {c_id}</span>
+            <span style="color:#6B7280; font-size:14px;"> &nbsp;|&nbsp; {c_title} &nbsp;|&nbsp; {c_yoe} YoE</span>
+        </div>
+        <span style="background:{pill_bg}; color:{pill_fg}; padding:5px 14px; border-radius:999px;
+               font-weight:700; font-size:13px; white-space:nowrap;">{pill_label}: {c_score:.1f}%</span>
+    </div>
+    {f'<div style="margin-top:10px;"><span style="background:#FEE2E2; color:#B91C1C; border:1px solid #FCA5A5; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:600;">⚠️ Defensive Flag: Keyword Stuffer / Wrong Domain</span></div>' if is_flagged else ''}
+</div>
+""", unsafe_allow_html=True)
 
+        # Collapsible details below the header
+        with st.expander("View reasoning & scores", expanded=(c_rank <= 3)):
             st.markdown(f"""
-<div style="background:#FAFAFA; padding:1.25rem 1.5rem; border-radius:8px;">
-    <div style="font-size:14px; font-weight:700; color:#111827; margin-bottom:6px;">AI-Generated Reasoning:</div>
-    <div style="font-size:14px; color:#4B5563; line-height:1.7; margin-bottom:20px;">{r['reasoning']}</div>
+<div style="padding:0.75rem 0.25rem;">
+    <div style="font-size:14px; font-weight:700; color:#111827; margin-bottom:6px;">Reasoning:</div>
+    <div style="font-size:14px; color:#4B5563; line-height:1.75; margin-bottom:20px;">{r['reasoning']}</div>
     <div style="font-size:14px; font-weight:700; color:#111827; margin-bottom:10px;">Sub-Scores:</div>
-    <div style="display:flex; gap:48px; font-size:14px; color:#4B5563;">
+    <div style="display:flex; gap:3rem; font-size:14px; color:#4B5563;">
         <div><span style="font-weight:600; color:#374151;">Semantic Match:</span> {r['semantic_score']*100:.1f}%</div>
         <div><span style="font-weight:600; color:#374151;">Keyword Density:</span> {jd_res['score']*100:.1f}%</div>
         <div><span style="font-weight:600; color:#374151;">Behavioral Indicators:</span> {beh_res['multiplier']*100:.1f}%</div>
