@@ -28,7 +28,7 @@ team_members:
 # Code and reproducibility
 # ============================================================================
 github_repo: "https://github.com/Meghashyam3/INDIA-RUNS-Hackathon"
-sandbox_link: "<INSERT_SANDBOX_LINK_HERE>"
+sandbox_link: "https://india-runs-vertexlabs.streamlit.app"
 
 reproduce_command: >
   python src/precompute.py --candidates ./data/candidates.jsonl --out_embeddings ./data/candidate_embeddings.npy &&
